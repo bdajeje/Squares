@@ -20,10 +20,17 @@ SOURCES += main.cpp \
     models/auto_block.cpp \
     models/life_block.cpp \
     models/shield_block.cpp \
-    models/score_block.cpp
+    models/score_block.cpp \
+    managers/sound_manager.cpp \
+    audio/jukebox.cpp \
+    models/menu.cpp \
+    utils/key_limitor.cpp \
+    game/event_handler.cpp \
+    game/engine.cpp
 
-LIBS += -lsfml-graphics -lsfml-window -lsfml-system \
-        -lboost_filesystem -lboost_system
+LIBS += -pthread \
+        -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system \
+        -lboost_regex -lboost_filesystem -lboost_system
 
 HEADERS += \
     game/game.hpp \
@@ -43,4 +50,11 @@ HEADERS += \
     models/auto_block.hpp \
     models/life_block.hpp \
     models/shield_block.hpp \
-    models/score_block.hpp
+    models/score_block.hpp \
+    managers/sound_manager.hpp \
+    audio/jukebox.hpp \
+    models/menu.hpp \
+    utils/key_limitor.hpp \
+    game/event_handler.hpp \
+    game/engine.hpp \
+    graphics/window.hpp

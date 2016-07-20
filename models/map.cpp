@@ -5,6 +5,7 @@
 #include "models/shield_block.hpp"
 #include "models/score_block.hpp"
 #include "utils/mathematics.hpp"
+#include "managers/sound_manager.hpp"
 
 namespace model {
 
@@ -14,6 +15,11 @@ Map::Map(float width, float height)
 {
   // By default reserver some space for future map blocks
   _map_blocks.reserve(100);
+
+  // Load sounds
+  std::array<std::string, 2> sound_files = {"bonus_beep.wav", "ennemy_beep.wav"};
+  for(const std::string& sound_file : sound_files)
+    _sounds[sound_file].setBuffer(sound::SoundManager::get(sound_file));
 }
 
 void Map::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -62,6 +68,9 @@ void Map::applyCollision(std::shared_ptr<Player>& player)
     {
       // Apply collision effect
       map_block->collision(player);
+
+      // Play sound
+      _sounds.at(map_block->getSoundFile()).play();
 
       // Destroy block
       _map_blocks.erase(block_it);
@@ -126,19 +135,19 @@ void Map::generateSquares(const sf::Time& elapsed_time)
 
   const float size = utils::maths::random(min_block_size, max_block_size);
 
-  // Generate ennemy or bonus ?
+  // Randomly generate ennemy or bonus
   if( utils::maths::random(0, 101) <= bonus_block_chance )
   {
     const int type = utils::maths::random(0, 3);
     switch(type)
     {
-      case 0: _map_blocks.emplace_back( new LifeBlock{position, size, direction} ); break;
-      case 1: _map_blocks.emplace_back( new ShieldBlock{position, size, direction} ); break;
-      case 2: _map_blocks.emplace_back( new ScoreBlock{position, size, direction} ); break;
+      case 0: _map_blocks.emplace_back( new LifeBlock{position, size, direction, "bonus_beep.wav"} ); break;
+      case 1: _map_blocks.emplace_back( new ShieldBlock{position, size, direction, "bonus_beep.wav"} ); break;
+      case 2: _map_blocks.emplace_back( new ScoreBlock{position, size, direction, "bonus_beep.wav"} ); break;
     }
   }
   else
-    _map_blocks.emplace_back( new EnnemyBlock{position, size, direction} );
+    _map_blocks.emplace_back( new EnnemyBlock{position, size, direction, "ennemy_beep.wav"} );
 
   _time_since_last_square_generation = 0;
 }

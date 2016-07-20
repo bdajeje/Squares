@@ -2,15 +2,13 @@
 
 namespace game {
 
-Game::Game(std::shared_ptr<sf::RenderWindow> window)
-  : _window {window}  
+Game::Game(std::shared_ptr<sf::RenderWindow>& window)
+  : _window {window}
+  , _jukebox {"./resources/musics"}
 {
-  // Hide mouse cursor
-  _window->setMouseCursorVisible(false);
-}
+  // Play music
+//  _jukebox.play();
 
-void Game::restart()
-{
   const sf::Vector2u window_size = _window->getSize();
 
   _map.reset( new model::Map(window_size.x, window_size.y) );
@@ -18,48 +16,40 @@ void Game::restart()
   _hud.reset( new model::HUD(_player, window_size.x, window_size.y) );
 
   _timer.restart();
-  start();
 }
 
-void Game::togglePause()
+EventAction Game::handleEvents(const sf::Event& event)
 {
-  if(_timer.isPaused())
-    _timer.start();
-  else
-    _timer.pause();
-}
-
-bool Game::handleEvents()
-{
-  sf::Event event;
-  while(_window->pollEvent(event))
+  // Remove compiler warnings about some enumeration values not handled in switch
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wswitch"
+  switch(event.type)
   {
-    // Close program
-    if( event.type == sf::Event::Closed )
-      return false;
+    case sf::Event::KeyPressed:
+    {
+      if(EventHandler::isKeyPressed(sf::Keyboard::Escape))
+        return EventAction::ShowMenu;
 
-    // Remove compiler warnings about some enumeration values not handled in switch
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wswitch"
-    switch(event.type)
-    {      
-      case sf::Event::MouseMoved:
+      break;
+    }
+    case sf::Event::MouseMoved:
+    {
+      if(_state == State::Running)
       {
-        if(_state == State::Running)
-        {
-          const sf::Vector2i mouse_position = sf::Mouse::getPosition(*_window);
-          _player->setPosition( sf::Vector2f{static_cast<float>(mouse_position.x), static_cast<float>(mouse_position.y)} );
-        }
-        break;
+        const sf::Vector2i mouse_position = sf::Mouse::getPosition(*_window);
+        _player->setPosition( sf::Vector2f{static_cast<float>(mouse_position.x), static_cast<float>(mouse_position.y)} );
       }
+      break;
     }
   }
 
-  return true;
+  return EventAction::Continue;
 }
 
-void Game::updateModels()
+void Game::update(const sf::Time& /*elapsed_time*/)
 {
+  // Let's ignore given elapsed time, and focus and our game timer
+
   // Get elapsed time since last update
   const sf::Time elapsed_time = _timer.restart();
 
@@ -82,30 +72,22 @@ void Game::updateModels()
   }
 }
 
-void Game::draw()
+void Game::focus()
 {
-  static const sf::Color background_color {0, 0, 0};
-
-  _window->clear(background_color);
-  _window->draw(*_map);
-  _window->draw(*_player);
-  _window->draw(*_hud);
-
-  _window->display();
+  _timer.start();
+  _window->setMouseCursorVisible(false);
 }
 
-void Game::start()
+void Game::unfocus()
 {
-  while(_window->isOpen())
-  {
-    if(!handleEvents())
-      return;
+  _timer.pause();
+}
 
-    if(_state == State::Running)
-      updateModels();
-
-    draw();
-  }
+void Game::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+  target.draw(*_map, states);
+  target.draw(*_player, states);
+  target.draw(*_hud, states);
 }
 
 }

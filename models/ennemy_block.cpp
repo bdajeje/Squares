@@ -4,8 +4,8 @@
 
 namespace model {
 
-EnnemyBlock::EnnemyBlock(const sf::Vector2f& position, float size, const Direction& direction)
-  : AutoBlock {position, size, direction, sf::Color::Red}
+EnnemyBlock::EnnemyBlock(const sf::Vector2f& position, float size, const Direction& direction, const std::string& sound_file)
+  : AutoBlock {position, size, direction, sf::Color::Red, sound_file}
 {}
 
 void EnnemyBlock::collision(std::shared_ptr<Player>& player)

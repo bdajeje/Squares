@@ -9,7 +9,7 @@ class ScoreBlock final : public AutoBlock
 {
   public:
 
-    ScoreBlock(const sf::Vector2f& position, float size, const Direction& direction);
+    ScoreBlock(const sf::Vector2f& position, float size, const Direction& direction, const std::string& sound_file);
 
     void collision(std::shared_ptr<Player>& player);
 
