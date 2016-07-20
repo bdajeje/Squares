@@ -26,7 +26,8 @@ SOURCES += main.cpp \
     models/menu.cpp \
     utils/key_limitor.cpp \
     game/event_handler.cpp \
-    game/engine.cpp
+    game/engine.cpp \
+    game/mouse_texts_focusable.cpp
 
 LIBS += -pthread \
         -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system \
@@ -57,4 +58,5 @@ HEADERS += \
     utils/key_limitor.hpp \
     game/event_handler.hpp \
     game/engine.hpp \
-    graphics/window.hpp
+    graphics/window.hpp \
+    game/mouse_texts_focusable.hpp

@@ -7,10 +7,12 @@
 #include <SFML/Audio/Sound.hpp>
 
 #include "graphics/window.hpp"
+#include "game/mouse_texts_focusable.hpp"
 
 namespace model {
 
-class Menu final : public graphics::Window
+class Menu final : public graphics::Window,
+                   public game::MouseTextsFocusable
 {
   public:
 
@@ -25,6 +27,7 @@ class Menu final : public graphics::Window
 
     void changeMenuItem(int number, bool play_sound = true);
     game::EventAction handleEvents(const sf::Event& event);
+    void focusOverrabledText(const sf::Text* text);
 
   private:
 

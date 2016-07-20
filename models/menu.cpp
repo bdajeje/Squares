@@ -25,12 +25,16 @@ Menu::Menu(std::shared_ptr<sf::RenderWindow>& window)
   const sf::Font& font = font::FontManager::get("consolas.ttf");
 
   _texts.resize(s_menu_items.size());
+
   for(size_t i = 0; i < s_menu_items.size(); ++i)
   {
     sf::Text& text = _texts[i];
     text.setString(s_menu_items[i]);
     text.setFont(font);
     text.setCharacterSize(45);
+
+    // Add item to mouse overables
+    addOverrableText(&text);
   }
 
   const sf::Vector2u window_size = window->getSize();
@@ -38,6 +42,7 @@ Menu::Menu(std::shared_ptr<sf::RenderWindow>& window)
 
   changeMenuItem(_selected_menu_item, false);
 }
+
 void Menu::changeMenuItem(int number, bool play_sound)
 {
   _texts[_selected_menu_item].setColor(s_default_color);
@@ -71,6 +76,18 @@ game::EventAction Menu::handleEvents(const sf::Event& event)
   #pragma GCC diagnostic ignored "-Wswitch"
   switch(event.type)
   {
+    case sf::Event::MouseMoved:
+    {
+      checkTextOvered(sf::Mouse::getPosition(*_window));
+      break;
+    }
+    case sf::Event::MouseButtonReleased:
+    {
+      // Check mouse is overred currently selected item, if yes return related item action
+      const sf::Text* overred_text = checkTextOvered(sf::Mouse::getPosition(*_window));
+      if(overred_text)
+        return _s_item_actions.at(_selected_menu_item);
+    }
     case sf::Event::KeyPressed:
     {
       if(isKeyPressed(sf::Keyboard::Up))
@@ -95,6 +112,19 @@ game::EventAction Menu::handleEvents(const sf::Event& event)
 void Menu::focus()
 {
   _window->setMouseCursorVisible(true);
+}
+
+void Menu::focusOverrabledText(const sf::Text* text)
+{
+  const size_t nbr_items = Menu::s_menu_items.size();
+  for(size_t i = 0; i < nbr_items; ++i)
+  {
+    if(&_texts.at(i) == text)
+    {
+      changeMenuItem(i);
+      return;
+    }
+  }
 }
 
 }
