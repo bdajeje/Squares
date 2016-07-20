@@ -4,6 +4,7 @@
 #include "models/life_block.hpp"
 #include "models/shield_block.hpp"
 #include "models/score_block.hpp"
+#include "models/scale_block.hpp"
 #include "utils/mathematics.hpp"
 #include "managers/sound_manager.hpp"
 
@@ -17,7 +18,7 @@ Map::Map(float width, float height)
   _map_blocks.reserve(100);
 
   // Load sounds
-  std::array<std::string, 2> sound_files = {"bonus_beep.wav", "ennemy_beep.wav"};
+  std::array<std::string, 5> sound_files = {"bonus_life.wav", "bonus_shield.wav", "bonus_score.wav", "bonus_scale.wav", "ennemy_beep.wav"};
   for(const std::string& sound_file : sound_files)
     _sounds[sound_file].setBuffer(sound::SoundManager::get(sound_file));
 }
@@ -138,13 +139,15 @@ void Map::generateSquares(const sf::Time& elapsed_time)
   // Randomly generate ennemy or bonus
   if( utils::maths::random(0, 101) <= bonus_block_chance )
   {
-    const int type = utils::maths::random(0, 3);
-    switch(type)
-    {
-      case 0: _map_blocks.emplace_back( new LifeBlock{position, size, direction, "bonus_beep.wav"} ); break;
-      case 1: _map_blocks.emplace_back( new ShieldBlock{position, size, direction, "bonus_beep.wav"} ); break;
-      case 2: _map_blocks.emplace_back( new ScoreBlock{position, size, direction, "bonus_beep.wav"} ); break;
-    }
+//    const int type = utils::maths::random(0, 4);
+//    switch(type)
+//    {
+//      case 0: _map_blocks.emplace_back( new LifeBlock{position, size, direction, "bonus_life.wav"} ); break;
+//      case 1: _map_blocks.emplace_back( new ShieldBlock{position, size, direction, "bonus_shield.wav"} ); break;
+//      case 2: _map_blocks.emplace_back( new ScoreBlock{position, size, direction, "bonus_score.wav"} ); break;
+//      case 3: _map_blocks.emplace_back( new ScaleBlock{position, size, direction, "bonus_scale.wav"} ); break;
+//    }
+    _map_blocks.emplace_back( new ScaleBlock{position, size, direction, "bonus_scale.wav"} );
   }
   else
     _map_blocks.emplace_back( new EnnemyBlock{position, size, direction, "ennemy_beep.wav"} );

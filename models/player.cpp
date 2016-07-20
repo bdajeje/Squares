@@ -6,6 +6,7 @@ Player::Player(const std::string& name, const sf::Vector2f& position)
   : MapBlock {position, _base_size, sf::Color::White}
   , _name {name}
   , _health {_max_health}
+  , _scale {1.f, 1.f}
 {}
 
 void Player::hit(int value)
@@ -42,17 +43,34 @@ bool Player::gainShield(int value)
   return true;
 }
 
+void Player::gainScale(float value)
+{
+  _scale.x += value;
+  if(_scale.x < 1.f)
+    _scale.x = 1.f;
+  else if(_scale.x > _max_scale)
+    _scale.x = _max_scale;
+
+  _scale.y = _scale.x;
+  _shape.setScale(_scale);
+}
+
 void Player::update(const sf::Time& elapsed_time)
 {
   MapBlock::update(elapsed_time);
 
   // Update score every seconds
-  _last_score_update += elapsed_time.asMilliseconds();
+  const sf::Int32 milliseconds = elapsed_time.asMilliseconds();
+  _last_score_update += milliseconds;
   if( _last_score_update >= _update_score_step )
   {
     _last_score_update -= _update_score_step;
     gainScore(10);
   }
+
+  // Update square size
+  if( _scale.x < _max_scale )
+    gainScale(milliseconds * _growth);
 }
 
 }

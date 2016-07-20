@@ -34,7 +34,7 @@ class MapBlock : public graphics::Drawable
 
     void rotate(const sf::Time& elapsed_time);
 
-  private:
+  protected:
 
     sf::RectangleShape _shape;
     float _rotation_speed {0.1};

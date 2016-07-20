@@ -31,6 +31,7 @@ class Player final : public MapBlock
     bool gainShield(int value);
 
     void gainScore(int value) { _score += value; }
+    void gainScale(float value);
 
     bool isDead() const { return _health <= 0; }
 
@@ -47,13 +48,15 @@ class Player final : public MapBlock
     int _health;
     int _shield {0};
     int _score {0};
-
+    sf::Vector2f _scale;
     unsigned int _last_score_update {0};
 
-    static const int _max_health {100};
-    static const int _max_shield {100};
-    static const unsigned int _base_size {30};
-    static const unsigned int _update_score_step {1000}; // in milliseconds
+    static constexpr float _growth {0.00001};
+    static constexpr float _max_scale {4.f};
+    static constexpr int _max_health {100};
+    static constexpr int _max_shield {100};
+    static constexpr unsigned int _base_size {20};
+    static constexpr unsigned int _update_score_step {1000}; // in milliseconds
 };
 
 }
