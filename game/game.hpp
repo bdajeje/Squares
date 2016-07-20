@@ -10,6 +10,7 @@
 #include "models/map.hpp"
 #include "models/hud.hpp"
 #include "utils/timer.hpp"
+#include "utils/settings.hpp"
 #include "audio/jukebox.hpp"
 
 namespace game {
@@ -23,7 +24,7 @@ class Game final : public graphics::Window
 {
   public:
 
-    Game(std::shared_ptr<sf::RenderWindow>& window);
+    Game(std::shared_ptr<sf::RenderWindow>& window, std::shared_ptr<utils::Settings>& settings);
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     void update(const sf::Time&);

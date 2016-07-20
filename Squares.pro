@@ -11,7 +11,6 @@ SOURCES += main.cpp \
     utils/graphics.cpp \
     utils/timer.cpp \
     models/player.cpp \
-    graphics/drawable.cpp \
     models/map.cpp \
     models/mapblock.cpp \
     models/ennemy_block.cpp \
@@ -28,7 +27,8 @@ SOURCES += main.cpp \
     game/event_handler.cpp \
     game/engine.cpp \
     game/mouse_texts_focusable.cpp \
-    models/scale_block.cpp
+    models/scale_block.cpp \
+    utils/settings.cpp
 
 LIBS += -pthread \
         -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system \
@@ -61,4 +61,5 @@ HEADERS += \
     game/engine.hpp \
     graphics/window.hpp \
     game/mouse_texts_focusable.hpp \
-    models/scale_block.hpp
+    models/scale_block.hpp \
+    utils/settings.hpp

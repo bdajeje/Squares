@@ -10,7 +10,7 @@
 
 namespace model {
 
-Map::Map(float width, float height)
+Map::Map(float width, float height, float sound_volume)
   : _width {width}
   , _height {height}
 {
@@ -20,7 +20,11 @@ Map::Map(float width, float height)
   // Load sounds
   std::array<std::string, 5> sound_files = {"bonus_life.wav", "bonus_shield.wav", "bonus_score.wav", "bonus_scale.wav", "ennemy_beep.wav"};
   for(const std::string& sound_file : sound_files)
-    _sounds[sound_file].setBuffer(sound::SoundManager::get(sound_file));
+  {
+    sf::Sound& sound = _sounds[sound_file];
+    sound.setBuffer(sound::SoundManager::get(sound_file));
+    sound.setVolume(sound_volume);
+  }
 }
 
 void Map::draw(sf::RenderTarget& target, sf::RenderStates states) const

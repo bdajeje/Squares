@@ -6,22 +6,24 @@
 
 namespace model {
 
-const std::array<std::string, 5> Menu::s_menu_items = {"Resume", "Audio", "Keys", "Graphics", "Quit"};
-const std::array<game::EventAction, 5> Menu::_s_item_actions = {
+const std::array<std::string, 2> Menu::s_menu_items = {"Resume", "Quit"};
+const std::array<game::EventAction, 2> Menu::_s_item_actions = {
   game::EventAction::ShowGame,
-  game::EventAction::ShowMenuAudio,
-  game::EventAction::ShowMenuKeys,
-  game::EventAction::ShowMenuGraphics,
   game::EventAction::Exit,
 };
 const sf::Color Menu::s_default_color {255, 255, 255};
 const sf::Color Menu::s_selected_color {0, 0, 255};
 
-Menu::Menu(std::shared_ptr<sf::RenderWindow>& window)
+Menu::Menu(std::shared_ptr<sf::RenderWindow>& window, const std::shared_ptr<utils::Settings>& settings)
   : _window {window}
   , _change_item_sound {sound::SoundManager::get("menu_change_item.wav")}
   , _select_item_sound {sound::SoundManager::get("menu_select_item.wav")}
+  , _settings {settings}
 {
+  const float sound_volume = settings->get<float>(utils::Settings::SoundVolume, 50.f);
+  _change_item_sound.setVolume(sound_volume);
+  _select_item_sound.setVolume(sound_volume);
+
   const sf::Font& font = font::FontManager::get("consolas.ttf");
 
   _texts.resize(s_menu_items.size());

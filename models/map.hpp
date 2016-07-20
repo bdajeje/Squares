@@ -16,7 +16,7 @@ class Map final : public graphics::Drawable
 {
   public:
 
-    Map(float width, float height);
+    Map(float width, float height, float sound_volume);
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     void update(const sf::Time& elapsed_time);

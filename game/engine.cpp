@@ -7,18 +7,15 @@
 
 namespace game {
 
-Engine::Engine(std::shared_ptr<sf::RenderWindow>& window)
+Engine::Engine(std::shared_ptr<sf::RenderWindow>& window, std::shared_ptr<utils::Settings>& settings)
   : _window {window}
 {
   // Init random
   srand(time(NULL));
 
   _windows.reserve(2);
-  _windows.emplace_back( new Game{_window} );
-  _windows.emplace_back( new model::Menu{_window} );
-//  _windows.emplace_back( new model::MenuAudio{_window} );
-//  _windows.emplace_back( new model::MenuKeys{_window} );
-//  _windows.emplace_back( new model::MenuGraphics{_window} );
+  _windows.emplace_back( new Game{_window, settings} );
+  _windows.emplace_back( new model::Menu{_window, settings} );
 
   focusWindow(0);
 }
@@ -42,13 +39,10 @@ void Engine::start()
       const EventAction event_action = _focused_window->handleEvents(event);
       switch(event_action)
       {
-        case EventAction::Continue:         break;
-        case EventAction::ShowGame:         focusWindow(0); break;
-        case EventAction::ShowMenu:         focusWindow(1); break;
-        case EventAction::ShowMenuAudio:    focusWindow(2); break;
-        case EventAction::ShowMenuKeys:     focusWindow(3); break;
-        case EventAction::ShowMenuGraphics: focusWindow(4); break;
-        case EventAction::Exit:             return;
+        case EventAction::Continue: break;
+        case EventAction::ShowGame: focusWindow(0); break;
+        case EventAction::ShowMenu: focusWindow(1); break;
+        case EventAction::Exit:     return;
       }
     }
 

@@ -7,6 +7,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "graphics/window.hpp"
+#include "utils/settings.hpp"
 
 namespace game {
 
@@ -14,7 +15,7 @@ class Engine final
 {
   public:
 
-    Engine(std::shared_ptr<sf::RenderWindow>& window);
+    Engine(std::shared_ptr<sf::RenderWindow>& window, std::shared_ptr<utils::Settings>& settings);
 
     void start();
 

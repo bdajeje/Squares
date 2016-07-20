@@ -2,16 +2,18 @@
 
 namespace game {
 
-Game::Game(std::shared_ptr<sf::RenderWindow>& window)
+Game::Game(std::shared_ptr<sf::RenderWindow>& window, std::shared_ptr<utils::Settings>& settings)
   : _window {window}
   , _jukebox {"./resources/musics"}
 {
   // Play music
-//  _jukebox.play();
+  _jukebox.setVolume(settings->get<float>(utils::Settings::MusicVolume, 50.f));
+  _jukebox.play();
 
   const sf::Vector2u window_size = _window->getSize();
+  const float sound_volume = settings->get<float>(utils::Settings::SoundVolume, 50.f);
 
-  _map.reset( new model::Map(window_size.x, window_size.y) );
+  _map.reset( new model::Map(window_size.x, window_size.y, sound_volume) );
   _player.reset( new model::Player("Nani", sf::Vector2f{window_size.x / 2.0f, window_size.y / 2.0f}) );
   _hud.reset( new model::HUD(_player, window_size.x, window_size.y) );
 

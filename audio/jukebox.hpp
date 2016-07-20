@@ -21,6 +21,8 @@ class Jukebox final
 
     void autoPlayNext();
 
+    void setVolume(float volume) { _music.setVolume(volume); }
+
   protected:
 
     size_t _current_music_offset {0};

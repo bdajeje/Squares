@@ -11,9 +11,6 @@ enum class EventAction {
   Continue,
   ShowGame,
   ShowMenu,
-  ShowMenuAudio,
-  ShowMenuKeys,
-  ShowMenuGraphics,
   Exit
 };
 
