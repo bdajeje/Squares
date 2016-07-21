@@ -24,7 +24,7 @@ Menu::Menu(std::shared_ptr<sf::RenderWindow>& window, const std::shared_ptr<util
   _change_item_sound.setVolume(sound_volume);
   _select_item_sound.setVolume(sound_volume);
 
-  const sf::Font& font = font::FontManager::get("consolas.ttf");
+  const sf::Font& font = font::FontManager::get(font::Consolas);
 
   _texts.resize(s_menu_items.size());
 

@@ -11,11 +11,12 @@ class ShieldBlock final : public AutoBlock
 
     ShieldBlock(const sf::Vector2f& position, float size, const Direction& direction, const std::string& sound_file);
 
-    void collision(std::shared_ptr<Player>& player);
+    std::vector<BlockEffect> collision(std::shared_ptr<Player>& player);
 
   private:
 
     static constexpr int _shield_gain {20};
+    static constexpr int _score_gain {5};
 };
 
 }

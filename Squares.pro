@@ -28,7 +28,11 @@ SOURCES += main.cpp \
     game/engine.cpp \
     game/mouse_texts_focusable.cpp \
     models/scale_block.cpp \
-    utils/settings.cpp
+    utils/settings.cpp \
+    graphics/effect.cpp \
+    graphics/effects/move.cpp \
+    graphics/effects/fading.cpp \
+    graphics/effects/text_effect.cpp
 
 LIBS += -pthread \
         -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system \
@@ -62,4 +66,10 @@ HEADERS += \
     graphics/window.hpp \
     game/mouse_texts_focusable.hpp \
     models/scale_block.hpp \
-    utils/settings.hpp
+    utils/settings.hpp \
+    graphics/effect.hpp \
+    graphics/effects/move.hpp \
+    graphics/effects/fading.hpp \
+    graphics/effects/text_effect.hpp \
+    graphics/effects/remove_from.hpp \
+    defines/fonts.hpp

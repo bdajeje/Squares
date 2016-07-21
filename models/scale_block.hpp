@@ -11,7 +11,7 @@ class ScaleBlock final : public AutoBlock
 
     ScaleBlock(const sf::Vector2f& position, float size, const Direction& direction, const std::string& sound_file);
 
-    void collision(std::shared_ptr<Player>& player);
+    std::vector<BlockEffect> collision(std::shared_ptr<Player>& player);
 
   private:
 

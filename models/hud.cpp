@@ -14,7 +14,7 @@ HUD::HUD(std::shared_ptr<Player>& player, float width, float height)
   , _width {width}
   , _height {height}
 {
-  const sf::Font& font = font::FontManager::get("consolas.ttf");
+  const sf::Font& font = font::FontManager::get(font::Consolas);
   const sf::Color color {255, 255, 255};
 
   // Margin between HUD borders and texts (ratio of sizes)

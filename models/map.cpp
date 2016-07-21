@@ -7,6 +7,10 @@
 #include "models/scale_block.hpp"
 #include "utils/mathematics.hpp"
 #include "managers/sound_manager.hpp"
+#include "managers/fontmanager.hpp"
+#include "graphics/effects/move.hpp"
+#include "graphics/effects/fading.hpp"
+#include "graphics/effects/remove_from.hpp"
 
 namespace model {
 
@@ -29,6 +33,11 @@ Map::Map(float width, float height, float sound_volume)
 
 void Map::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+  // Draw flying texts
+  for(const std::shared_ptr<sf::Text>& flying_text : _flying_texts)
+    target.draw(*flying_text, states);
+
+  // Draw block
   for(const std::unique_ptr<model::AutoBlock>& map_block : _map_blocks)
     target.draw(*map_block, states);
 }
@@ -56,6 +65,20 @@ void Map::update(const sf::Time& elapsed_time)
     map_block->update(elapsed_time);
   }
 
+  // Update effects
+  for(auto it = _graphic_effects.begin(); it < _graphic_effects.end(); ++it)
+  {
+    std::unique_ptr<graphics::Effect>& effect = *it;
+
+    if(effect->isFinished())
+    {
+      _graphic_effects.erase(std::remove(_graphic_effects.begin(), _graphic_effects.end(), effect), _graphic_effects.end());
+      continue;
+    }
+
+    effect->update(elapsed_time);
+  }
+
   // Generate new square
   generateSquares(elapsed_time);
 }
@@ -72,7 +95,10 @@ void Map::applyCollision(std::shared_ptr<Player>& player)
     if( rectangle.intersects(map_block->getBounds()) )
     {
       // Apply collision effect
-      map_block->collision(player);
+      const std::vector<BlockEffect> effects_information = map_block->collision(player);
+
+      // Create collision effect messages      
+      createEffectsInformation(effects_information, map_block->getPosition());
 
       // Play sound
       _sounds.at(map_block->getSoundFile()).play();
@@ -82,6 +108,36 @@ void Map::applyCollision(std::shared_ptr<Player>& player)
 
       break;
     }
+  }
+}
+
+void Map::createEffectsInformation(const std::vector<BlockEffect>& effects_information, const sf::Vector2f& position)
+{
+  float y_offset = 0;
+  for(const BlockEffect& effect_info : effects_information)
+  {
+    sf::Vector2f effect_pos = position;
+
+    // Create flying text
+    std::shared_ptr<sf::Text> flying_text = std::make_shared<sf::Text>(effect_info.text, font::FontManager::get(font::Consolas), 17);
+
+    // Place text correctly
+    effect_pos.x -= flying_text->getGlobalBounds().width / 2;
+    effect_pos.y -= y_offset;
+
+    flying_text->setPosition(effect_pos);
+    flying_text->setColor(effect_info.color);
+    _flying_texts.push_back(flying_text);
+
+    // Prevent multipe effects from stacking (having same position)
+    y_offset -= flying_text->getGlobalBounds().height + _height * s_flying_text_margin;
+
+    // Create associated effect
+    static const sf::Time duration = sf::milliseconds(750);
+    static const sf::Vector2f move {0, -_height * s_flying_text_move};
+    _graphic_effects.emplace_back( new graphics::effect::Move{flying_text, duration, move} );
+    _graphic_effects.emplace_back( new graphics::effect::Fading{flying_text, duration, 0} );
+    _graphic_effects.emplace_back( new graphics::effect::RemoveFrom<std::vector<std::shared_ptr<sf::Text>>>{flying_text, duration, &_flying_texts} );
   }
 }
 
@@ -143,15 +199,14 @@ void Map::generateSquares(const sf::Time& elapsed_time)
   // Randomly generate ennemy or bonus
   if( utils::maths::random(0, 101) <= bonus_block_chance )
   {
-//    const int type = utils::maths::random(0, 4);
-//    switch(type)
-//    {
-//      case 0: _map_blocks.emplace_back( new LifeBlock{position, size, direction, "bonus_life.wav"} ); break;
-//      case 1: _map_blocks.emplace_back( new ShieldBlock{position, size, direction, "bonus_shield.wav"} ); break;
-//      case 2: _map_blocks.emplace_back( new ScoreBlock{position, size, direction, "bonus_score.wav"} ); break;
-//      case 3: _map_blocks.emplace_back( new ScaleBlock{position, size, direction, "bonus_scale.wav"} ); break;
-//    }
-    _map_blocks.emplace_back( new ScaleBlock{position, size, direction, "bonus_scale.wav"} );
+    const int type = utils::maths::random(0, 4);
+    switch(type)
+    {
+      case 0: _map_blocks.emplace_back( new LifeBlock{position, size, direction, "bonus_life.wav"} ); break;
+      case 1: _map_blocks.emplace_back( new ShieldBlock{position, size, direction, "bonus_shield.wav"} ); break;
+      case 2: _map_blocks.emplace_back( new ScoreBlock{position, size, direction, "bonus_score.wav"} ); break;
+      case 3: _map_blocks.emplace_back( new ScaleBlock{position, size, direction, "bonus_scale.wav"} ); break;
+    }
   }
   else
     _map_blocks.emplace_back( new EnnemyBlock{position, size, direction, "ennemy_beep.wav"} );

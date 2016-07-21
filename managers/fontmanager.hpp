@@ -6,6 +6,9 @@
 #include <map>
 #include <memory>
 
+// Include fonts here, so any include of this file (fontmanager.hpp) brings fonts.hpp too
+#include "defines/fonts.hpp"
+
 namespace font {
 
 class FontManager final

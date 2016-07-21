@@ -5,13 +5,23 @@
 namespace model {
 
 ShieldBlock::ShieldBlock(const sf::Vector2f& position, float size, const Direction& direction, const std::string& sound_file)
-  : AutoBlock {position, size, direction, sf::Color::Blue, sound_file}
+  : AutoBlock {position, size, direction, ShieldColor, sound_file}
 {}
 
-void ShieldBlock::collision(std::shared_ptr<Player>& player)
+std::vector<BlockEffect> ShieldBlock::collision(std::shared_ptr<Player>& player)
 {
-  if(!player->gainShield(_shield_gain))
-    player->gainScore(5);
+  std::vector<BlockEffect> effects;
+  effects.reserve(1);
+
+  if(player->gainShield(_shield_gain))
+    effects.push_back(std::move(BlockEffect{ShieldText, ShieldColor}));
+  else
+  {
+    player->gainScore(_score_gain);
+    effects.push_back(std::move(BlockEffect{ScoreText, ScoreColor}));
+  }
+
+  return effects;
 }
 
 }

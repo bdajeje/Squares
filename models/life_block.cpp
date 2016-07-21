@@ -5,13 +5,23 @@
 namespace model {
 
 LifeBlock::LifeBlock(const sf::Vector2f& position, float size, const Direction& direction, const std::string& sound_file)
-  : AutoBlock {position, size, direction, sf::Color::Green, sound_file}
+  : AutoBlock {position, size, direction, LifeColor, sound_file}
 {}
 
-void LifeBlock::collision(std::shared_ptr<Player>& player)
+std::vector<BlockEffect> LifeBlock::collision(std::shared_ptr<Player>& player)
 {
-  if(!player->gainLife(_life_gain))
-    player->gainScore(5);
+  std::vector<BlockEffect> effects;
+  effects.reserve(1);
+
+  if(player->gainLife(_life_gain))
+    effects.push_back(std::move(BlockEffect{LifeText, LifeColor}));
+  else
+  {
+    player->gainScore(_score_gain);
+    effects.push_back(std::move(BlockEffect{ScoreText, ScoreColor}));
+  }
+
+  return std::move(effects);
 }
 
 }
