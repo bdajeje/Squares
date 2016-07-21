@@ -1,12 +1,17 @@
 #include "player.hpp"
 
+#include "utils/file.hpp"
+
 namespace model {
+
+const std::string Player::s_score_path {"resources/scores/"};
 
 Player::Player(const std::string& name, const sf::Vector2f& position)
   : MapBlock {position, _base_size, sf::Color::White}
   , _name {name}
   , _health {_max_health}
   , _scale {1.f, 1.f}
+  , _highest_score {retrieveHighestScore(name)}
 {}
 
 void Player::hit(int value)
@@ -71,6 +76,29 @@ void Player::update(const sf::Time& elapsed_time)
   // Update square size
   if( _scale.x < _max_scale )
     gainScale(milliseconds * _growth);
+}
+
+void Player::saveScore()
+{
+  if(_score > _highest_score)
+  {
+    utils::files::create(s_score_path + utils::files::sanitize(_name), std::to_string(_score), true);
+    _highest_score = _score;
+  }
+}
+
+int Player::retrieveHighestScore(const std::string& player_name)
+{
+  std::string content;
+  try
+  {
+    utils::files::read(s_score_path + utils::files::sanitize(player_name), content);
+    return std::stoi(content);
+  }
+  catch(...)
+  {
+    return 0;
+  }
 }
 
 }

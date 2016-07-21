@@ -70,6 +70,7 @@ void Game::update(const sf::Time& /*elapsed_time*/)
   if(_player->isDead())
   {
     _state = State::GameOver;
+    _player->saveScore();
     _hud->showGameOver();
   }
 }

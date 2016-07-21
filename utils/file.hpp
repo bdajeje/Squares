@@ -31,6 +31,9 @@ inline bool exists(const std::string& filepath) { return boost::filesystem::exis
  */
 bool create( const std::string& filepath, const std::string& content, bool override );
 
+/*! Sanitize a string to be a valid filename (replace any character which is not a letter or digit by an underscore) */
+std::string sanitize(const std::string& input);
+
 }
 }
 

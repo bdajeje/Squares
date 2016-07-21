@@ -34,6 +34,10 @@ class Game final : public graphics::Window
 
   private:
 
+    void saveScore() const;
+
+  private:
+
     std::shared_ptr<sf::RenderWindow> _window;
 
     std::shared_ptr<model::Player> _player;

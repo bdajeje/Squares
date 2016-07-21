@@ -3,6 +3,7 @@
 #include <boost/regex.hpp>
 #include <iostream>
 #include <fstream>
+#include <regex>
 
 namespace utils {
 namespace files {
@@ -48,6 +49,11 @@ bool create( const std::string& filepath, const std::string& content, bool overr
   new_file.close();
 
   return true;
+}
+
+std::string sanitize(const std::string& input)
+{
+  return std::regex_replace(input, std::regex{"[^a-z^A-Z^0-9]"}, "_");
 }
 
 } // namespace files

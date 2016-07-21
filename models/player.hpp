@@ -15,6 +15,8 @@ class Player final : public MapBlock
 
     void update(const sf::Time& elapsed_time);
 
+    void saveScore();
+
     /*! Player being hit by a block
      *  First remove shield, then life.
      */
@@ -42,6 +44,10 @@ class Player final : public MapBlock
     int getMaxShield() const { return _max_shield; }
     int getScore() const { return _score; }
 
+  protected:
+
+    int retrieveHighestScore(const std::string& player_name);
+
   private:
 
     std::string _name;
@@ -49,7 +55,10 @@ class Player final : public MapBlock
     int _shield {0};
     int _score {0};
     sf::Vector2f _scale;
+    int _highest_score;
     unsigned int _last_score_update {0};
+
+    static const std::string s_score_path;
 
     static constexpr float _growth {0.00001};
     static constexpr float _max_scale {4.f};
