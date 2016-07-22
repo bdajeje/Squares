@@ -17,6 +17,15 @@ Jukebox::Jukebox(const std::string& directory)
   std::random_shuffle( _music_files.begin(), _music_files.end() );
 }
 
+Jukebox::~Jukebox()
+{
+  try
+  {
+    _thread.release();
+  }
+  catch(...) {}
+}
+
 bool Jukebox::play()
 {
   if(_music_files.empty())

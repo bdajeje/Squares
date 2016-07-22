@@ -14,6 +14,8 @@ class Jukebox final
 
     Jukebox(const std::string& directory);
 
+    ~Jukebox();
+
     /*! Start jukebox
      *  \returns true if a music has been started, false otherwise
      */
