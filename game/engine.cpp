@@ -2,19 +2,21 @@
 
 #include <iostream>
 
-#include "game.hpp"
 #include "models/menu.hpp"
 
 namespace game {
 
 Engine::Engine(std::shared_ptr<sf::RenderWindow>& window, std::shared_ptr<utils::Settings>& settings)
   : _window {window}
+  , _game { new Game{_window, settings} }
+  , _welcome_screen { new WelcomeScreen{_window, settings} }
 {
   // Init random
   srand(time(NULL));
 
-  _windows.reserve(2);
-  _windows.emplace_back( new Game{_window, settings} );
+  _windows.reserve(3);
+  _windows.emplace_back( _welcome_screen );
+  _windows.emplace_back( _game );
   _windows.emplace_back( new model::Menu{_window, settings} );
 
   focusWindow(0);
@@ -40,8 +42,14 @@ void Engine::start()
       switch(event_action)
       {
         case EventAction::Continue: break;
-        case EventAction::ShowGame: focusWindow(0); break;
-        case EventAction::ShowMenu: focusWindow(1); break;
+        case EventAction::CreateGame:
+        {
+          _game->start(_welcome_screen->getPlayerName());
+          focusWindow(1);
+          break;
+        }
+        case EventAction::ShowGame: focusWindow(1); break;
+        case EventAction::ShowMenu: focusWindow(2); break;
         case EventAction::Exit:     return;
       }
     }

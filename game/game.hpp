@@ -26,7 +26,7 @@ class Game final : public graphics::Window
 
     Game(std::shared_ptr<sf::RenderWindow>& window, std::shared_ptr<utils::Settings>& settings);
 
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    void start(const std::string& player_name);
     void update(const sf::Time&);
     void focus();
     void unfocus();
@@ -34,17 +34,19 @@ class Game final : public graphics::Window
 
   private:
 
+    void internalDraw(sf::RenderTarget& target, sf::RenderStates states) const;
     void saveScore() const;
 
   private:
 
     std::shared_ptr<sf::RenderWindow> _window;
+    audio::Jukebox _jukebox;
+    std::shared_ptr<utils::Settings> _settings;
 
     std::shared_ptr<model::Player> _player;
     std::shared_ptr<model::Map> _map;
     std::shared_ptr<model::HUD> _hud;
 
-    audio::Jukebox _jukebox;
     utils::time::Timer _timer;    
     State _state {State::Running};
 };

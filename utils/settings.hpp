@@ -56,13 +56,14 @@ class Settings final
     static const std::string MusicVolume;
     static const std::string WindowWidth;
     static const std::string WindowHeight;
+    static const std::string LastPlayer;
 
   private:
 
     std::string _filepath;
     std::map<std::string, std::string> _setting_values;
 
-    static const std::array<std::string, 4> s_setting_keys;
+    static const std::array<std::string, 5> s_setting_keys;
 };
 
 }

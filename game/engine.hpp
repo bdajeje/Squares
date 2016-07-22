@@ -8,6 +8,8 @@
 
 #include "graphics/window.hpp"
 #include "utils/settings.hpp"
+#include "game/game.hpp"
+#include "game/welcome_screen.hpp"
 
 namespace game {
 
@@ -27,6 +29,8 @@ class Engine final
 
     utils::time::Timer _timer;
     std::shared_ptr<sf::RenderWindow> _window;
+    std::shared_ptr<game::Game> _game;
+    std::shared_ptr<game::WelcomeScreen> _welcome_screen;
     std::vector<std::shared_ptr<graphics::Window>> _windows;
     std::shared_ptr<graphics::Window> _focused_window;
 };

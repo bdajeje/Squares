@@ -10,6 +10,7 @@ namespace game {
 enum class EventAction {
   Continue,
   ShowGame,
+  CreateGame,
   ShowMenu,
   Exit
 };

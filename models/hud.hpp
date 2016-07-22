@@ -14,7 +14,6 @@ class HUD final : public graphics::Drawable
 
     HUD(std::shared_ptr<Player>& player, float width, float height);
 
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     void update(const sf::Time& elapsed_time);
 
     void updateScore(unsigned int score);
@@ -24,6 +23,7 @@ class HUD final : public graphics::Drawable
 
   protected:
 
+    void internalDraw(sf::RenderTarget& target, sf::RenderStates states) const;
     void updateElapsedTime(sf::Int32 value);    
     void updateBar(sf::RectangleShape& bar, float value, float max_value);
     float itemMargin() const;

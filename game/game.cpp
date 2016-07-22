@@ -5,16 +5,24 @@ namespace game {
 Game::Game(std::shared_ptr<sf::RenderWindow>& window, std::shared_ptr<utils::Settings>& settings)
   : _window {window}
   , _jukebox {"./resources/musics"}
+  , _settings {settings}
+{}
+
+void Game::start(const std::string& player_name)
 {
+  // Save last player name to auto load it on next program boot
+  _settings->set(utils::Settings::LastPlayer, player_name);
+  _settings->save();
+
   // Play music
-  _jukebox.setVolume(settings->get<float>(utils::Settings::MusicVolume, 50.f));
+  const float sound_volume = _settings->get<float>(utils::Settings::SoundVolume, 50.f);
+  _jukebox.setVolume(_settings->get<float>(utils::Settings::MusicVolume, 50.f));
   _jukebox.play();
 
   const sf::Vector2u window_size = _window->getSize();
-  const float sound_volume = settings->get<float>(utils::Settings::SoundVolume, 50.f);
 
   _map.reset( new model::Map(window_size.x, window_size.y, sound_volume) );
-  _player.reset( new model::Player("Nani", sf::Vector2f{window_size.x / 2.0f, window_size.y / 2.0f}) );
+  _player.reset( new model::Player(player_name, sf::Vector2f{window_size.x / 2.0f, window_size.y / 2.0f}) );
   _hud.reset( new model::HUD(_player, window_size.x, window_size.y) );
 
   _timer.restart();
@@ -86,7 +94,7 @@ void Game::unfocus()
   _timer.pause();
 }
 
-void Game::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void Game::internalDraw(sf::RenderTarget& target, sf::RenderStates states) const
 {
   target.draw(*_map, states);
   target.draw(*_player, states);

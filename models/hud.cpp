@@ -62,7 +62,7 @@ HUD::HUD(std::shared_ptr<Player>& player, float width, float height)
   _game_over_score.setCharacterSize(30);
 }
 
-void HUD::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void HUD::internalDraw(sf::RenderTarget& target, sf::RenderStates states) const
 {
   target.draw(_player_name, states);
   target.draw(_health_bar, states);

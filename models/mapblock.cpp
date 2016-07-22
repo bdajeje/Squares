@@ -18,7 +18,7 @@ MapBlock::MapBlock(const sf::Vector2f& position, float size, const sf::Color& co
     _rotation_speed = -_rotation_speed;
 }
 
-void MapBlock::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void MapBlock::internalDraw(sf::RenderTarget& target, sf::RenderStates states) const
 {
   target.draw(_shape, states);
 }

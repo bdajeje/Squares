@@ -32,7 +32,11 @@ SOURCES += main.cpp \
     graphics/effect.cpp \
     graphics/effects/move.cpp \
     graphics/effects/fading.cpp \
-    graphics/effects/text_effect.cpp
+    graphics/effects/text_effect.cpp \
+    game/welcome_screen.cpp \
+    graphics/widget/text_input.cpp \
+    graphics/effects/drawable_effect.cpp \
+    graphics/effects/blink.cpp
 
 LIBS += -pthread \
         -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system \
@@ -72,4 +76,9 @@ HEADERS += \
     graphics/effects/fading.hpp \
     graphics/effects/text_effect.hpp \
     graphics/effects/remove_from.hpp \
-    defines/fonts.hpp
+    defines/fonts.hpp \
+    game/welcome_screen.hpp \
+    graphics/widget/text_input.hpp \
+    graphics/effects/drawable_effect.hpp \
+    graphics/effects/blink.hpp \
+    graphics/rectangle_shape.hpp

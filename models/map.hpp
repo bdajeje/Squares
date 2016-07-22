@@ -19,7 +19,6 @@ class Map final : public graphics::Drawable
 
     Map(float width, float height, float sound_volume);
 
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     void update(const sf::Time& elapsed_time);
 
     void applyCollision(std::shared_ptr<Player>& player);
@@ -28,6 +27,7 @@ class Map final : public graphics::Drawable
 
     void generateSquares(const sf::Time& elapsed_time);
     void createEffectsInformation(const std::vector<BlockEffect>& effects_information, const sf::Vector2f& position);
+    void internalDraw(sf::RenderTarget& target, sf::RenderStates states) const;
 
   private:
 

@@ -62,7 +62,7 @@ void Menu::changeMenuItem(int number, bool play_sound)
     _change_item_sound.play();
 }
 
-void Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void Menu::internalDraw(sf::RenderTarget& target, sf::RenderStates states) const
 {
   for(const sf::Text& text : _texts)
     target.draw(text, states);
@@ -118,6 +118,9 @@ void Menu::focus()
 
 void Menu::focusOverrabledText(const sf::Text* text)
 {
+  if(!text)
+    return;
+
   const size_t nbr_items = Menu::s_menu_items.size();
   for(size_t i = 0; i < nbr_items; ++i)
   {

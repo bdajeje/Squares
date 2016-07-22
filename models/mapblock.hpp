@@ -21,7 +21,6 @@ class MapBlock : public graphics::Drawable
 
     MapBlock(const sf::Vector2f& position, float size, const sf::Color& color);    
 
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     virtual void update(const sf::Time& elapsed_time);
 
     void setPosition(const sf::Vector2f& position);
@@ -32,6 +31,7 @@ class MapBlock : public graphics::Drawable
 
   private:
 
+    void internalDraw(sf::RenderTarget& target, sf::RenderStates states) const;
     void rotate(const sf::Time& elapsed_time);
 
   protected:

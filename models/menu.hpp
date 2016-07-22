@@ -19,13 +19,13 @@ class Menu final : public graphics::Window,
 
     Menu(std::shared_ptr<sf::RenderWindow>& window, const std::shared_ptr<utils::Settings>& settings);
 
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     void update(const sf::Time& elapsed_time);
     void focus();
     void unfocus() {}
 
   private:
 
+    void internalDraw(sf::RenderTarget& target, sf::RenderStates states) const;
     void changeMenuItem(int number, bool play_sound = true);
     game::EventAction handleEvents(const sf::Event& event);
     void focusOverrabledText(const sf::Text* text);

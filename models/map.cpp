@@ -31,7 +31,7 @@ Map::Map(float width, float height, float sound_volume)
   }
 }
 
-void Map::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void Map::internalDraw(sf::RenderTarget& target, sf::RenderStates states) const
 {
   // Draw flying texts
   for(const std::shared_ptr<sf::Text>& flying_text : _flying_texts)
