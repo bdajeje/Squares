@@ -50,10 +50,14 @@ WelcomeScreen::WelcomeScreen(std::shared_ptr<sf::RenderWindow>& window, std::sha
 
   // Add next button to mouse overables
   addOverrableText(&_next_text);
+
+  // Add map to background
+  _map.reset( new model::Map(window_size.x, window_size.y, 0) );
 }
 
 void WelcomeScreen::internalDraw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+  target.draw(*_map, states);
   target.draw(_title_text, states);
   target.draw(_intro_text, states);
   target.draw(*_name_input, states);
@@ -63,6 +67,7 @@ void WelcomeScreen::internalDraw(sf::RenderTarget& target, sf::RenderStates stat
 void WelcomeScreen::update(const sf::Time& elapsed_time)
 {
   _name_input->update(elapsed_time);
+  _map->update(elapsed_time);
 }
 
 EventAction WelcomeScreen::handleEvents(const sf::Event& event)

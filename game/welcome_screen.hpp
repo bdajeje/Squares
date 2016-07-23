@@ -10,6 +10,7 @@
 #include "graphics/widget/text_input.hpp"
 #include "game/mouse_texts_focusable.hpp"
 #include "utils/settings.hpp"
+#include "models/map.hpp"
 
 namespace game {
 
@@ -40,6 +41,7 @@ class WelcomeScreen final : public graphics::Window,
     sf::Text _next_text;
     sf::Sound _select_item_sound;
     std::unique_ptr<graphics::TextInput> _name_input;
+    std::shared_ptr<model::Map> _map;
 
     static const sf::Color s_default_color;
     static const sf::Color s_selected_color;
